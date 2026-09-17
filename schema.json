@@ -1,0 +1,126 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/Lucas-Castanheira-Gama/cnpj-lint/main/schema.json",
+  "title": "cnpj-lint",
+  "description": "Configuração do cnpj-lint (.cnpjlintrc.json, cnpj-lint.config.json ou a chave \"cnpjLint\" do package.json).",
+  "type": "object",
+  "additionalProperties": false,
+  "definitions": {
+    "setting": {
+      "type": "string",
+      "enum": ["off", "info", "warning", "error"]
+    },
+    "language": {
+      "type": "string",
+      "enum": [
+        "javascript",
+        "typescript",
+        "markup",
+        "python",
+        "java",
+        "kotlin",
+        "scala",
+        "groovy",
+        "csharp",
+        "vb",
+        "c",
+        "go",
+        "php",
+        "ruby",
+        "rust",
+        "dart",
+        "swift",
+        "elixir",
+        "sql",
+        "cobol",
+        "delphi",
+        "delphi-form",
+        "xbase",
+        "xml",
+        "xsd",
+        "json",
+        "yaml",
+        "toml",
+        "graphql",
+        "protobuf",
+        "prisma",
+        "shell"
+      ]
+    }
+  },
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "include": {
+      "description": "Analisa apenas caminhos que casam com estes globs (sintaxe .gitignore).",
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "exclude": {
+      "description": "Ignora caminhos que casam com estes globs (sintaxe .gitignore).",
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "rules": {
+      "description": "Nível de cada regra: off, info, warning ou error.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "numeric-regex": { "$ref": "#/definitions/setting" },
+        "strip-non-digits": { "$ref": "#/definitions/setting" },
+        "numeric-conversion": { "$ref": "#/definitions/setting" },
+        "numeric-type": { "$ref": "#/definitions/setting" },
+        "numeric-storage": { "$ref": "#/definitions/setting" },
+        "digit-only-check": { "$ref": "#/definitions/setting" },
+        "checksum-numeric-parse": { "$ref": "#/definitions/setting" },
+        "numeric-mask": { "$ref": "#/definitions/setting" },
+        "numeric-input": { "$ref": "#/definitions/setting" },
+        "nfe-access-key": { "$ref": "#/definitions/setting" },
+        "xsd-numeric-pattern": { "$ref": "#/definitions/setting" },
+        "hibernate-cnpj-format": { "$ref": "#/definitions/setting" },
+        "outdated-dependency": { "$ref": "#/definitions/setting" },
+        "branch-0001-headquarters": { "$ref": "#/definitions/setting" },
+        "excluded-letters": { "$ref": "#/definitions/setting" },
+        "numeric-test-data": { "$ref": "#/definitions/setting" }
+      }
+    },
+    "identifiers": {
+      "description": "Nomes extras usados para CNPJ no seu código (ex.: nr_insc, docFederal). cnpj e cgc já são reconhecidos.",
+      "type": "array",
+      "items": { "type": "string", "minLength": 2 }
+    },
+    "extensions": {
+      "description": "Extensões adicionais e a linguagem de cada uma (ex.: { \".abc\": \"xbase\" }).",
+      "type": "object",
+      "additionalProperties": { "$ref": "#/definitions/language" }
+    },
+    "maxFileSize": {
+      "description": "Arquivos maiores que este tamanho (bytes) são ignorados. Padrão: 2097152.",
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "gitignore": {
+      "description": "Usa git ls-files para respeitar o .gitignore. Padrão: true.",
+      "type": "boolean"
+    },
+    "defaultExcludes": {
+      "description": "Ignora node_modules, dist, build, vendor e outros diretórios gerados. Padrão: true.",
+      "type": "boolean"
+    },
+    "failOn": {
+      "description": "Nível mínimo que faz o comando terminar com código 1. Padrão: error.",
+      "type": "string",
+      "enum": ["none", "info", "warning", "error"]
+    },
+    "locale": {
+      "description": "Idioma das mensagens. Padrão: pt-BR.",
+      "type": "string",
+      "enum": ["pt-BR", "en"]
+    },
+    "baseline": {
+      "description": "Arquivo de baseline com ocorrências já conhecidas.",
+      "type": "string"
+    }
+  }
+}

@@ -1,0 +1,37 @@
+name: Nova regra ou linguagem
+description: Sugira um padrão que quebra com o CNPJ alfanumérico e ainda não é detectado.
+title: '[sugestão]: '
+labels: [nova regra]
+body:
+  - type: input
+    id: linguagem
+    attributes:
+      label: Linguagem, framework ou formato
+      placeholder: Ex.: ABAP, Oracle Forms, CNAB 240, Kotlin + Room
+    validations:
+      required: true
+  - type: textarea
+    id: padrao
+    attributes:
+      label: Código que quebra
+      description: Exemplos do padrão problemático (sem dados reais).
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: correcao
+    attributes:
+      label: Como corrigir
+      description: Como o código deveria ficar, se souber.
+      render: text
+  - type: textarea
+    id: fonte
+    attributes:
+      label: Referências
+      description: Documentação da linguagem, da biblioteca ou da Receita Federal que embase a regra.
+  - type: checkboxes
+    id: contribuir
+    attributes:
+      label: Contribuição
+      options:
+        - label: Quero implementar esta regra (veja o CONTRIBUTING.md)

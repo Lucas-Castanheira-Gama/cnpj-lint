@@ -1,0 +1,122 @@
+name: cnpj-lint
+description: Encontra no código os pontos que quebram com o CNPJ alfanumérico, com anotações no PR, SARIF e resumo do job.
+author: Lucas Castanheira Gama
+branding:
+  icon: search
+  color: green
+
+inputs:
+  paths:
+    description: Arquivos ou diretórios a analisar, separados por vírgula ou quebra de linha.
+    required: false
+    default: .
+  working-directory:
+    description: Diretório base da análise (onde fica o arquivo de configuração).
+    required: false
+    default: .
+  config:
+    description: Caminho do arquivo de configuração. Padrão, .cnpjlintrc.json se existir.
+    required: false
+    default: ''
+  fail-on:
+    description: Nível mínimo que falha o job (error, warning, info ou none).
+    required: false
+    default: error
+  baseline:
+    description: Arquivo de baseline com ocorrências já conhecidas (gerado com --update-baseline).
+    required: false
+    default: ''
+  locale:
+    description: Idioma das mensagens (pt-BR ou en).
+    required: false
+    default: pt-BR
+  annotations:
+    description: Cria anotações nas linhas do PR.
+    required: false
+    default: 'true'
+  summary:
+    description: Escreve o resumo em Markdown na página do job.
+    required: false
+    default: 'true'
+  sarif-file:
+    description: Onde gravar o relatório SARIF, relativo ao working-directory.
+    required: false
+    default: cnpj-lint.sarif
+  upload-sarif:
+    description: Envia o SARIF para o GitHub code scanning. Exige permissão security-events write e repositório público ou com GitHub Advanced Security.
+    required: false
+    default: 'false'
+
+outputs:
+  errors:
+    description: Quantidade de erros.
+    value: ${{ steps.scan.outputs.errors }}
+  warnings:
+    description: Quantidade de avisos.
+    value: ${{ steps.scan.outputs.warnings }}
+  infos:
+    description: Quantidade de informativos.
+    value: ${{ steps.scan.outputs.infos }}
+  total:
+    description: Total de ocorrências.
+    value: ${{ steps.scan.outputs.total }}
+  files-scanned:
+    description: Quantidade de arquivos analisados.
+    value: ${{ steps.scan.outputs.files-scanned }}
+  sarif-file:
+    description: Caminho absoluto do SARIF gerado.
+    value: ${{ steps.scan.outputs.sarif-file }}
+  failed:
+    description: true quando há ocorrências no nível de fail-on ou acima.
+    value: ${{ steps.scan.outputs.failed }}
+
+runs:
+  using: composite
+  steps:
+    - name: Verificar Node.js
+      id: node
+      shell: bash
+      run: |
+        if command -v node >/dev/null 2>&1 && [ "$(node -p 'process.versions.node.split(".")[0]')" -ge 20 ]; then
+          echo "ok=true" >> "$GITHUB_OUTPUT"
+        else
+          echo "ok=false" >> "$GITHUB_OUTPUT"
+        fi
+
+    - name: Instalar Node.js
+      if: steps.node.outputs.ok != 'true'
+      uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+      with:
+        node-version: 24
+
+    - name: Executar cnpj-lint
+      id: scan
+      shell: bash
+      env:
+        INPUT_PATHS: ${{ inputs.paths }}
+        INPUT_WORKING_DIRECTORY: ${{ inputs.working-directory }}
+        INPUT_CONFIG: ${{ inputs.config }}
+        INPUT_FAIL_ON: ${{ inputs.fail-on }}
+        INPUT_BASELINE: ${{ inputs.baseline }}
+        INPUT_LOCALE: ${{ inputs.locale }}
+        INPUT_ANNOTATIONS: ${{ inputs.annotations }}
+        INPUT_SUMMARY: ${{ inputs.summary }}
+        INPUT_SARIF_FILE: ${{ inputs.sarif-file }}
+      run: node "$GITHUB_ACTION_PATH/dist/action.js"
+
+    - name: Enviar SARIF ao code scanning
+      if: always() && inputs.upload-sarif == 'true' && steps.scan.outputs.sarif-file != ''
+      uses: github/codeql-action/upload-sarif@b96794f015dfd88f77b49b1c93e0fa7110f94c63 # v4.38.0
+      with:
+        sarif_file: ${{ steps.scan.outputs.sarif-file }}
+        category: cnpj-lint
+
+    - name: Verificar resultado
+      if: steps.scan.outputs.failed == 'true'
+      shell: bash
+      env:
+        TOTAL: ${{ steps.scan.outputs.total }}
+        FAIL_ON: ${{ inputs.fail-on }}
+      run: |
+        echo "::error title=cnpj-lint::Há ocorrências no nível '$FAIL_ON' ou acima ($TOTAL no total). Veja as anotações e o resumo do job."
+        exit 1

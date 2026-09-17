@@ -1,0 +1,5 @@
+Django==5.2.6
+validate-docbr==1.10.0
+brutils>=2.4
+Faker>=40.33.0  # testes
+python-stdnum

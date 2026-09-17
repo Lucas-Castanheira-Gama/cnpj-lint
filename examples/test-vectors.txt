@@ -1,0 +1,74 @@
+# Vetores de teste compartilhados pelas implementações de referência.
+# Formato: valor;esperado  (true = válido, false = inválido)
+# Fonte dos exemplos oficiais: Receita Federal, Perguntas e Respostas do CNPJ alfanumérico (P&R 14 e 23).
+
+# Exemplos oficiais
+12.ABC.345/01DE-35;true
+12ABC34501DE35;true
+AA345678000A29;true
+AA.345.678/000A-29;true
+12.345.678/000A-08;true
+# A P&R 23 traz AA345678/0003-29 com DV ilustrativo; o DV correto é 86
+AA345678/0003-29;false
+AA345678/0003-86;true
+
+# Numéricos (continuam válidos)
+11.222.333/0001-81;true
+11222333000181;true
+00.000.000/0001-91;true
+
+# Todas as letras são aceitas (P&R 45)
+IOUQF000000033;true
+ZZZZZZZZZZZZ62;true
+ABCDEFGHIJKL80;true
+MNOPQRSTUVWX50;true
+YZ012345678981;true
+
+# Gerados (alfanuméricos e numéricos, com e sem máscara)
+YZCN5BMQWFZ070;true
+QFGR0CNORFM045;true
+LZ9PVUEU06I297;true
+CJWW7HJ7YKDJ08;true
+ZWVD86PKZDPZ02;true
+55T9BIUKX6A700;true
+WIDEZ0GSSETO90;true
+FQYHB0DC3HXI16;true
+P35R26GNHPLN27;true
+LH2YA7G9HT0K17;true
+JBQ8PAWLIXGO85;true
+DWLFUJF6B9VL86;true
+TW.2NN.WVZ/0YNE-67;true
+A9.M81.1SY/PLT9-31;true
+PH.S3M.9KN/Y8QC-90;true
+NW.RL8.8Y5/OGB7-01;true
+KF.F93.T8K/F924-18;true
+SB.HCL.QUA/8QWR-45;true
+51953059385339;true
+14402107506856;true
+21470719895309;true
+13588863570352;true
+
+# Entrada normalizada: minúsculas e espaços
+12abc34501de35;true
+ 12.ABC.345/01DE-35 ;true
+
+# Inválidos
+12.ABC.345/01DE-34;false
+12ABC34501DE53;false
+11222333000182;false
+00000000000000;false
+11111111111111;false
+12ABC34501DE3;false
+12ABC34501DE356;false
+12ABC34501DEA5;false
+12ABC3450!DE35;false
+12ABC34501DE3S;false
+# Só letras ASCII: "ı" (i sem ponto) não vira "I"
+ıOUQF000000033;false
+;false
+LQQGEG7JLM0T86;false
+OH3WWTS0SVRU26;false
+JWF2Y6JVUDL837;false
+KLEXMOLFV13U38;false
+7WZUQ0P6NRKY04;false
+LRNQLQ1WV9J701;false

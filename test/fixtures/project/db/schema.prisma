@@ -1,0 +1,6 @@
+model Empresa {
+  id          Int     @id @default(autoincrement())
+  cnpj        BigInt  @unique
+  cnpjTexto   String  @db.Char(14)
+  totalCnpjs  Int     @default(0)
+}

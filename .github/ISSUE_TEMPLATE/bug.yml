@@ -1,0 +1,30 @@
+name: Bug
+description: Erro, travamento ou comportamento inesperado da CLI, da Action ou da biblioteca.
+title: '[bug]: '
+labels: [bug]
+body:
+  - type: textarea
+    id: descricao
+    attributes:
+      label: O que aconteceu
+    validations:
+      required: true
+  - type: textarea
+    id: reproduzir
+    attributes:
+      label: Como reproduzir
+      description: Comando executado, configuração usada e, se possível, um repositório ou arquivo mínimo.
+    validations:
+      required: true
+  - type: textarea
+    id: saida
+    attributes:
+      label: Saída
+      render: text
+  - type: input
+    id: ambiente
+    attributes:
+      label: Ambiente
+      placeholder: cnpj-lint 1.0.0, Node 24, Windows 11 / GitHub Actions ubuntu-latest
+    validations:
+      required: true

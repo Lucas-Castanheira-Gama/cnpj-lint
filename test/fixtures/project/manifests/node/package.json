@@ -1,0 +1,13 @@
+{
+  "name": "loja",
+  "private": true,
+  "dependencies": {
+    "brazilian-values": "^0.14.0",
+    "cpf-cnpj-validator": "^1.0.3",
+    "express": "^5.0.0",
+    "validator": "^13.12.0"
+  },
+  "devDependencies": {
+    "@brazilian-utils/brazilian-utils": "^1.1.0"
+  }
+}

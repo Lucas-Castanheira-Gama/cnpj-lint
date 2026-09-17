@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Relatar vulnerabilidade de segurança
+    url: https://github.com/Lucas-Castanheira-Gama/cnpj-lint/security/advisories/new
+    about: Use o relato privado do GitHub para problemas de segurança.
+  - name: Guia de migração para o CNPJ alfanumérico
+    url: https://github.com/Lucas-Castanheira-Gama/cnpj-lint/blob/main/docs/guia-de-migracao.md
+    about: Checklist de banco, back-end, front-end, documentos fiscais e testes.

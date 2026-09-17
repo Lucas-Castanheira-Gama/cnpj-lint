@@ -1,0 +1,15 @@
+node_modules/
+.test-build/
+coverage/
+*.log
+*.tgz
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+cnpj-lint.sarif
+cnpj-lint-report.*
+examples/java/*.class
+examples/csharp/bin/
+examples/csharp/obj/
+__pycache__/

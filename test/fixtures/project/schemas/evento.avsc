@@ -1,0 +1,8 @@
+{
+  "type": "record",
+  "name": "EmpresaCriada",
+  "fields": [
+    { "name": "cnpj", "type": "long" },
+    { "name": "razaoSocial", "type": "string" }
+  ]
+}

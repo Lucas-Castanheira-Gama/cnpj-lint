@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package cadastro.v1;
+
+message Empresa {
+  int64 cnpj = 1;
+  string razao_social = 2;
+  string cnpj_texto = 3;
+}

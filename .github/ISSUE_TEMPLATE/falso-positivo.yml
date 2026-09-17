@@ -1,0 +1,49 @@
+name: Falso positivo ou falso negativo
+description: O cnpj-lint apontou algo que está certo, ou deixou passar algo que quebra.
+title: '[regra]: '
+labels: [precisão]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Obrigado por ajudar a deixar as regras mais precisas! **Não inclua CNPJs, CPFs ou outros dados reais**; use `cnpj-lint generate` para exemplos.
+  - type: dropdown
+    id: tipo
+    attributes:
+      label: Tipo
+      options:
+        - Falso positivo (apontou código correto)
+        - Falso negativo (não apontou código que quebra)
+    validations:
+      required: true
+  - type: input
+    id: regra
+    attributes:
+      label: Regra
+      description: Ex.: numeric-type, strip-non-digits
+  - type: input
+    id: linguagem
+    attributes:
+      label: Linguagem ou framework
+      placeholder: Ex.: Delphi 11, Laravel 12, Flutter
+    validations:
+      required: true
+  - type: textarea
+    id: codigo
+    attributes:
+      label: Trecho de código
+      description: O menor trecho que reproduz o problema, com o nome do arquivo (a extensão importa).
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: esperado
+    attributes:
+      label: O que você esperava
+    validations:
+      required: true
+  - type: input
+    id: versao
+    attributes:
+      label: Versão do cnpj-lint
+      placeholder: cnpj-lint --version

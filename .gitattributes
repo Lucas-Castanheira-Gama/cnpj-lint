@@ -1,0 +1,9 @@
+* text=auto eol=lf
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Saída compilada versionada para a GitHub Action
+dist/** linguist-generated=true
+
+# Fixtures são código propositalmente "quebrado" em várias linguagens
+test/fixtures/** linguist-vendored=true

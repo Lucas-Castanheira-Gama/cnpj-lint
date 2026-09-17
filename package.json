@@ -1,0 +1,71 @@
+{
+  "name": "cnpj-lint",
+  "version": "1.0.0",
+  "description": "Encontre os pontos do seu código que quebram com o CNPJ alfanumérico: scanner multi-linguagem com SARIF, GitHub Action e implementação de referência.",
+  "keywords": [
+    "cnpj",
+    "cnpj-alfanumerico",
+    "alphanumeric-cnpj",
+    "receita-federal",
+    "brasil",
+    "brazil",
+    "linter",
+    "static-analysis",
+    "sarif",
+    "github-action",
+    "nfe",
+    "migration"
+  ],
+  "homepage": "https://github.com/Lucas-Castanheira-Gama/cnpj-lint#readme",
+  "bugs": {
+    "url": "https://github.com/Lucas-Castanheira-Gama/cnpj-lint/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lucas-Castanheira-Gama/cnpj-lint.git"
+  },
+  "license": "MIT",
+  "author": "Lucas Castanheira Gama (https://github.com/Lucas-Castanheira-Gama)",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./cnpj": {
+      "types": "./dist/cnpj.d.ts",
+      "default": "./dist/cnpj.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "cnpj-lint": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "schema.json",
+    "README.md",
+    "README.en.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "node scripts/clean.mjs dist && tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "node scripts/clean.mjs .test-build && tsc -p tsconfig.test.json && node scripts/run-tests.mjs",
+    "lint": "biome check .",
+    "format": "biome check --write .",
+    "check": "npm run lint && npm run typecheck && npm test",
+    "self-scan": "node dist/cli.js ."
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.14",
+    "@types/node": "^20.19.43",
+    "typescript": "^7.0.2"
+  }
+}

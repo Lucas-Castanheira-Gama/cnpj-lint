@@ -1,0 +1,6 @@
+type Empresa {
+  id: ID!
+  cnpj: Int!
+  razaoSocial: String!
+  cnpjTexto: String
+}

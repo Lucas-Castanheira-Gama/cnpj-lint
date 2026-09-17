@@ -1,0 +1,36 @@
+name: Suporte de biblioteca
+description: Informe a partir de qual versão uma biblioteca aceita (ou não) o CNPJ alfanumérico.
+title: '[biblioteca]: '
+labels: [bibliotecas]
+body:
+  - type: dropdown
+    id: ecossistema
+    attributes:
+      label: Ecossistema
+      options: [npm, PyPI, Maven/Gradle, Composer, RubyGems, Go, NuGet, pub, Outro]
+    validations:
+      required: true
+  - type: input
+    id: pacote
+    attributes:
+      label: Pacote
+      placeholder: Ex.: org.exemplo:validador-br
+    validations:
+      required: true
+  - type: input
+    id: versao
+    attributes:
+      label: Primeira versão com suporte
+      description: Deixe em branco se nenhuma versão suporta.
+  - type: input
+    id: fonte
+    attributes:
+      label: Fonte
+      description: Link para release, changelog, PR ou commit que comprova a informação.
+    validations:
+      required: true
+  - type: textarea
+    id: observacoes
+    attributes:
+      label: Observações
+      description: Configuração extra necessária, limitações conhecidas etc.

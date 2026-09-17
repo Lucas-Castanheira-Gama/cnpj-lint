@@ -1,0 +1,102 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Lint e tipos
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+
+  test:
+    name: Testes (Node ${{ matrix.node }}, ${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        node: [20, 22, 24]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci
+      - run: npm test
+
+  dist:
+    name: dist/ atualizado
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Conferir dist/
+        run: |
+          if [ -n "$(git status --porcelain -- dist)" ]; then
+            git status --porcelain -- dist
+            echo "::error title=dist desatualizado::Rode 'npm run build' e inclua dist/ no commit."
+            exit 1
+          fi
+
+  action:
+    name: GitHub Action
+    needs: dist
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: cnpj-lint no próprio repositório
+        uses: ./
+        with:
+          fail-on: warning
+          upload-sarif: ${{ !github.event.repository.private && github.event_name == 'push' }}
+
+      - name: cnpj-lint no projeto de exemplo (deve encontrar problemas)
+        id: fixtures
+        uses: ./
+        continue-on-error: true
+        with:
+          working-directory: test/fixtures/project
+          annotations: 'false'
+          summary: 'false'
+          sarif-file: fixtures.sarif
+
+      - name: Conferir resultado do projeto de exemplo
+        env:
+          FAILED: ${{ steps.fixtures.outputs.failed }}
+          TOTAL: ${{ steps.fixtures.outputs.total }}
+          ERRORS: ${{ steps.fixtures.outputs.errors }}
+          SARIF: ${{ steps.fixtures.outputs.sarif-file }}
+        run: |
+          echo "failed=$FAILED total=$TOTAL errors=$ERRORS sarif=$SARIF"
+          test "$FAILED" = "true"
+          test "$TOTAL" -ge 100
+          test -s "$SARIF"
